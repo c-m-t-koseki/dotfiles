@@ -1,0 +1,219 @@
+let g:false = 0
+let g:true = 1
+
+" plug {{{
+let g:plug = {
+            \ "plug" : expand("~/.vim") . "/autoload/plug.vim",
+            \ "base" : expand("~/.vim") . "/plugged",
+            \ "url"  : "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim",
+            \ }
+
+function! g:plug.ready()
+    return filereadable(self.plug)
+endfunction
+
+if g:plug.ready()
+    call plug#begin(g:plug.base)
+
+    Plug 'itchyny/lightline.vim'
+
+    Plug 'tyru/caw.vim'
+    Plug 'junegunn/fzf'
+    Plug 'junegunn/fzf.vim'
+    Plug 'osyo-manga/vim-over'
+
+    Plug 'w0ng/vim-hybrid'
+
+    Plug 'dag/vim-fish'
+
+    call plug#end()
+endif
+
+let g:plug.plugs = get(g:, 'plugs', {})
+
+if !g:plug.ready()
+    function! g:plug.init()
+        call system(printf("curl -fLo %s --create-dirs %s", self.plug, self.url))
+        if v:shell_error
+            echohl ErrorMsg
+            echo printf('Error: g:plug.init: error occured(%d)', v:shell_error)
+            echohl None
+            return g:false
+        endif
+        echomsg 'vim-plug installed!'
+    endfunction
+
+    command! PlugInit call g:plug.init()
+    if confirm('Install vim-plug?', "Y\nn", 'Question') == 1
+        PlugInit
+    endif
+endif
+
+function! g:plug.is_installed(...)
+    let list = a:000
+
+    for arg in list
+        let name   = substitute(arg, '^vim-\|\.vim$', '', 'g')
+        let prefix = 'vim-' . name
+        let suffix = name . '.vim'
+        if v:false ||
+                    \ has_key(self.plugs, name  ) ? isdirectory(self.plugs[name  ].dir) :
+                    \ has_key(self.plugs, prefix) ? isdirectory(self.plugs[prefix].dir) :
+                    \ has_key(self.plugs, suffix) ? isdirectory(self.plugs[suffix].dir) :
+                    \ v:false
+            continue
+        else
+            return v:false
+        endif
+    endfor
+
+    return v:true
+endfunction
+" }}}
+
+
+" keymap {{{
+"" prefix
+nmap <Space> [Space]
+xmap <Space> [Space]
+nnoremap [Space] <Nop>
+xnoremap [Space] <Nop>
+
+"" important
+noremap : ;
+noremap ; :
+inoremap jk <Esc>
+onoremap jk <Esc>
+map <C-k> <Plug>(caw:hatpos:toggle)
+nnoremap [Space]. :<C-u>tabedit $MYVIMRC<CR>
+
+"" tab
+noremap gn gt
+noremap gp gT
+noremap gh <C-w>h
+noremap gj <C-w>j
+noremap gk <C-w>k
+noremap gl <C-w>l
+noremap gx <C-w>x
+noremap <silent>g\| :rightbelow vnew<CR>
+noremap <silent>g-  :rightbelow new<CR>
+noremap <silent>gc  :tabnew<CR>
+
+"" move
+noremap [Space]h ^
+noremap [Space]l $
+inoremap <C-b> <Left>
+cnoremap <C-b> <Left>
+inoremap <C-f> <Right>
+cnoremap <C-f> <Right>
+inoremap <C-a> <Home>
+cnoremap <C-a> <Home>
+inoremap <C-e> <End>
+cnoremap <C-e> <End>
+cnoremap <C-d> <Del>
+
+"" Nop
+nnoremap ZZ <Nop>
+nnoremap ZQ <Nop>
+nnoremap Q <Nop>
+nnoremap q: <Nop>
+nnoremap q/ <Nop>
+nnoremap q? <Nop>
+noremap <Up> <Nop>
+noremap <Down> <Nop>
+noremap <Left> <Nop>
+noremap <Right> <Nop>
+noremap <C-n> :cne<CR>
+noremap <C-p> :cpre<CR>
+
+nnoremap <C-]> g<C-]> 
+
+"" fzf
+if g:plug.is_installed('fzf')
+    nnoremap [Space]b :Buffers<CR>
+    nnoremap [Space]x :Commands<CR>
+    nnoremap [Space]f :GFiles<CR>
+    nnoremap [Space]a :Ag 
+    nnoremap [Space]r :History:<CR>
+endif
+
+"" vim-over
+if g:plug.is_installed('vim-over')
+    nnoremap <silent> ,/ :OverCommandLine<CR>%s/
+    vnoremap <silent> ,/ :OverCommandLine<CR>s/
+endif
+
+"" other
+nnoremap <silent><Esc><Esc> :nohlsearch<CR>
+" }}}
+
+" lightline
+let g:lightline = {'colorscheme': 'Tomorrow'}
+
+
+" options {{{
+"" looks
+set t_Co=256
+set laststatus=2
+set showmatch
+set nowrap
+set background=dark
+if g:plug.is_installed('hybrid')
+    colorscheme hybrid
+endif
+
+"" tab string
+set list
+set listchars=tab:>-,trail:-,nbsp:%,extends:>,precedes:<
+
+"" search
+set incsearch
+set hlsearch
+set ignorecase
+set smartcase
+set nowrapscan
+
+"" history
+set hidden
+set history=2000
+set noswapfile
+set nobackup
+
+"" indent
+set autoindent
+set expandtab
+set tabstop=4
+set shiftwidth=4
+
+"" other
+set backspace=indent,start
+
+set visualbell t_vb=
+
+set wildmenu
+set wildmode=longest:full,full
+
+set encoding=utf-8
+set fileencodings=ascii,iso-2022-jp,euc-jp,utf-8,sjis
+" }}}
+
+
+" vim diff {{{
+hi DiffAdd    cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
+hi DiffDelete cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
+hi DiffChange cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
+hi DiffText   cterm=bold ctermfg=10 ctermbg=88 gui=none guifg=bg guibg=Red
+" hi DiffAdd    ctermfg=black ctermbg=2
+" hi DiffChange ctermfg=black ctermbg=3
+" hi DiffDelete ctermfg=black ctermbg=6
+" hi DiffText   ctermfg=black ctermbg=7
+" }}}
+
+command! FixWhitespace :%s/\\\@<!\s\+$//
+
+set tags=/home/t-koseki/svn/tags
+
+syntax enable on
+filetype plugin indent on
+
+" vim: set fdm=marker nofen:

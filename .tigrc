@@ -1,0 +1,29 @@
+# viewの左端にコミットIDを表示する
+set main-view = id author commit-title:graph=yes,refs=yes
+# 垂直分割時の比率
+set split-view-width = 75%
+
+
+bind generic <Ctrl-b> scroll-page-up
+bind generic <Ctrl-f> scroll-page-down
+bind generic G move-last-line
+bind generic G none
+bind generic g move-first-line
+
+bind main    E !git rebase -i %(commit)
+
+
+########
+# branch view
+########
+
+# リモートブランチをtrackしつつチェックアウト
+bind branch T !git checkout -t %(branch)
+# カーソル行のブランチを親にして入力した名前のブランチを作成
+bind branch n !git checkout -b %(prompt) %(branch)
+# 不要になったブランチを削除（squash mergeや別リポジトリへのmergeをするワークフロー用）
+bind branch D !?git branch -D %(branch)
+# 不要になったブランチを削除
+bind branch d !?git branch -d %(branch)
+# originへのpush
+bind branch P !git push -u origin %(branch)
