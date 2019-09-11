@@ -25,6 +25,10 @@ _export_var PATH /usr/local/go/bin && \
     # _export_var PATH /usr/local/cuda/bin/
 _export_var LD_LIBRARY_PATH /usr/local/lib/cudnn_v7
 
+if [ -f "$HOME/.local/.bash_profile" ]; then
+    . "$HOME/.local/.bash_profile"
+fi
+
 unset -f _export_var
 
 # include .bashrc if it exists

@@ -147,4 +147,6 @@ fi
 
 _source_file $HOME/.fzf.bash
 
+_source_file $HOME/.local/.bashrc
+
 unset -f _source_file
