@@ -109,6 +109,26 @@ bind 'set show-all-if-ambiguous on'
 bind 'set menu-complete-display-prefix on'
 bind 'set colored-stats On'
 
+cd() {
+    dir_prev=($(pwd) "${dir_prev[@]}")
+    dir_next=()
+    builtin cd "$@"
+}
+prevd() {
+    if [[ ${#dir_prev[@]} > 0 ]]; then
+        dir_next=($(pwd) "${dir_next[@]}")
+        builtin cd "${dir_prev[0]}"
+        dir_prev=("${dir_prev[@]:1}")
+    fi
+}
+nextd() {
+    if [[ ${#dir_next[@]} > 0 ]]; then
+        dir_prev=($(pwd) "${dir_next[@]}")
+        builtin cd "${dir_next[0]}"
+        dir_next=("${dir_prev[@]:1}")
+    fi
+}
+
 # Alias definitions.
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
