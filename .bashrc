@@ -98,6 +98,15 @@ _source_file() {
     [ -f $1 ] && source $1
 }
 
+stty werase undef
+bind '"\C-w": unix-filename-rubout'
+bind '"\C-i": menu-complete'
+bind '"\ee": edit-and-execute-command'
+bind 'set completion-ignore-case on'
+bind 'set show-all-if-ambiguous on'
+bind 'set menu-complete-display-prefix on'
+bind 'set colored-stats On'
+
 # Alias definitions.
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
