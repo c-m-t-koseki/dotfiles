@@ -217,11 +217,13 @@ if g:plug.is_installed('easy-align')
 endif
 
 if g:plug.is_installed('fzf')
-    nnoremap [Space]b :Buffers<CR>
-    nnoremap [Space]x :Commands<CR>
-    nnoremap [Space]f :GFiles<CR>
-    nnoremap [Space]a :Ag 
-    nnoremap [Space]r :History:<CR>
+    nnoremap <silent>[Space]b :<C-u>Buffers<CR>
+    nnoremap <silent>[Space]x :<C-u>Commands<CR>
+    nnoremap <silent>[Space]f :<C-u>GFiles<CR>
+    nnoremap <silent>[Space]F :<C-u>Files<CR>
+    nnoremap <silent>[Space]r :<C-u>History:<CR>
+    nnoremap <silent>[Space]a :<C-u>call fzf#vim#ag('', {'options': '--bind alt-enter:select-all+accept'})<CR>
+    nnoremap <silent>[Space]/ :<C-u>call fzf#vim#buffer_lines('', {'options': '--bind alt-enter:select-all+accept'})<CR>
 endif
 
 if g:plug.is_installed('vim-over')
