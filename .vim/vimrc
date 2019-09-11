@@ -169,27 +169,30 @@ set smartcase
 set nowrapscan
 
 "" history
-set hidden
 set history=2000
 set noswapfile
 set nobackup
+
+"" complete
+set isfname-==
+set completeopt=menuone,noinsert,noselect
+set dict=/usr/share/dict/words
 
 "" indent
 set autoindent
 set expandtab
 set tabstop=4
 set shiftwidth=4
+set softtabstop=4
 
 "" other
 set backspace=indent,start
-
 set visualbell t_vb=
-
 set wildmenu
 set wildmode=longest:full,full
-
 set encoding=utf-8
 set fileencodings=ascii,iso-2022-jp,euc-jp,utf-8,sjis
+set hidden
 " }}}
 
 " plugin {{{
@@ -213,7 +216,8 @@ endif
 
 command! FixWhitespace :%s/\\\@<!\s\+$//
 
-syntax enable on
+syntax enable
 filetype plugin indent on
+set secure
 
 " vim: set fdm=marker nofen:
