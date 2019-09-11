@@ -1,6 +1,3 @@
-let g:false = 0
-let g:true = 1
-
 " plug {{{
 let g:plug = {
             \ "plug" : expand("~/.vim") . "/autoload/plug.vim",
@@ -11,44 +8,6 @@ let g:plug = {
 function! g:plug.ready()
     return filereadable(self.plug)
 endfunction
-
-if g:plug.ready()
-    call plug#begin(g:plug.base)
-
-    Plug 'itchyny/lightline.vim'
-
-    Plug 'tyru/caw.vim'
-    Plug 'junegunn/fzf'
-    Plug 'junegunn/fzf.vim'
-    Plug 'osyo-manga/vim-over'
-
-    Plug 'w0ng/vim-hybrid'
-
-    Plug 'dag/vim-fish', {'for': ['fish', 'vim']}
-    Plug 'Vimjas/vim-python-pep8-indent', {'for': ['python', 'vim']}
-
-    call plug#end()
-endif
-
-let g:plug.plugs = get(g:, 'plugs', {})
-
-if !g:plug.ready()
-    function! g:plug.init()
-        call system(printf("curl -fLo %s --create-dirs %s", self.plug, self.url))
-        if v:shell_error
-            echohl ErrorMsg
-            echo printf('Error: g:plug.init: error occured(%d)', v:shell_error)
-            echohl None
-            return g:false
-        endif
-        echomsg 'vim-plug installed!'
-    endfunction
-
-    command! PlugInit call g:plug.init()
-    if confirm('Install vim-plug?', "Y\nn", 'Question') == 1
-        PlugInit
-    endif
-endif
 
 function! g:plug.is_installed(...)
     let list = a:000
@@ -70,8 +29,45 @@ function! g:plug.is_installed(...)
 
     return v:true
 endfunction
-" }}}
 
+if !g:plug.ready()
+    function! g:plug.init()
+        call system(printf("curl -fLo %s --create-dirs %s", self.plug, self.url))
+        if v:shell_error
+            echohl ErrorMsg
+            echo printf('Error: g:plug.init: error occured(%d)', v:shell_error)
+            echohl NONE
+            return v:false
+        endif
+        echomsg 'vim-plug installed!'
+    endfunction
+
+    command! PlugInit call g:plug.init()
+    if confirm('Install vim-plug?', "y\nn", 'Question') == 1
+        PlugInit
+    endif
+endif
+
+if g:plug.ready()
+    call plug#begin(g:plug.base)
+
+    Plug 'itchyny/lightline.vim'
+
+    Plug 'tyru/caw.vim'
+    Plug 'junegunn/fzf'
+    Plug 'junegunn/fzf.vim'
+    Plug 'osyo-manga/vim-over'
+
+    Plug 'w0ng/vim-hybrid'
+
+    Plug 'dag/vim-fish', {'for': ['fish', 'vim']}
+    Plug 'Vimjas/vim-python-pep8-indent', {'for': ['python', 'vim']}
+
+    call plug#end()
+endif
+
+let g:plug.plugs = get(g:, 'plugs', {})
+" }}}
 
 " keymap {{{
 "" prefix
@@ -85,7 +81,6 @@ noremap : ;
 noremap ; :
 inoremap jk <Esc>
 onoremap jk <Esc>
-map <C-k> <Plug>(caw:hatpos:toggle)
 nnoremap [Space]. :<C-u>tabedit $MYVIMRC<CR>
 
 "" tab
@@ -129,28 +124,9 @@ noremap <C-p> :cpre<CR>
 
 nnoremap <C-]> g<C-]> 
 
-"" fzf
-if g:plug.is_installed('fzf')
-    nnoremap [Space]b :Buffers<CR>
-    nnoremap [Space]x :Commands<CR>
-    nnoremap [Space]f :GFiles<CR>
-    nnoremap [Space]a :Ag 
-    nnoremap [Space]r :History:<CR>
-endif
-
-"" vim-over
-if g:plug.is_installed('vim-over')
-    nnoremap <silent> ,/ :OverCommandLine<CR>%s/
-    vnoremap <silent> ,/ :OverCommandLine<CR>s/
-endif
-
 "" other
 nnoremap <silent><Esc><Esc> :nohlsearch<CR>
 " }}}
-
-" lightline
-let g:lightline = {'colorscheme': 'Tomorrow'}
-
 
 " options {{{
 "" looks
@@ -162,6 +138,10 @@ set background=dark
 if g:plug.is_installed('hybrid')
     colorscheme hybrid
 endif
+hi DiffAdd    cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
+hi DiffDelete cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
+hi DiffChange cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
+hi DiffText   cterm=bold ctermfg=10 ctermbg=88 gui=none guifg=bg guibg=Red
 
 "" tab string
 set list
@@ -198,21 +178,26 @@ set encoding=utf-8
 set fileencodings=ascii,iso-2022-jp,euc-jp,utf-8,sjis
 " }}}
 
+" plugin {{{
+if g:plug.is_installed('caw')
+    map <C-k> <Plug>(caw:hatpos:toggle)
+endif
 
-" vim diff {{{
-hi DiffAdd    cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
-hi DiffDelete cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
-hi DiffChange cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
-hi DiffText   cterm=bold ctermfg=10 ctermbg=88 gui=none guifg=bg guibg=Red
-" hi DiffAdd    ctermfg=black ctermbg=2
-" hi DiffChange ctermfg=black ctermbg=3
-" hi DiffDelete ctermfg=black ctermbg=6
-" hi DiffText   ctermfg=black ctermbg=7
+if g:plug.is_installed('fzf')
+    nnoremap [Space]b :Buffers<CR>
+    nnoremap [Space]x :Commands<CR>
+    nnoremap [Space]f :GFiles<CR>
+    nnoremap [Space]a :Ag 
+    nnoremap [Space]r :History:<CR>
+endif
+
+if g:plug.is_installed('vim-over')
+    nnoremap <silent>,/ :OverCommandLine<CR>%s/
+    vnoremap <silent>,/ :OverCommandLine<CR>s/
+endif
 " }}}
 
 command! FixWhitespace :%s/\\\@<!\s\+$//
-
-set tags=/home/t-koseki/svn/tags
 
 syntax enable on
 filetype plugin indent on
