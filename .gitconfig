@@ -18,10 +18,8 @@
   cancel = reset --soft HEAD~
   back = reset --hard HEAD~
   lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
-[credential]
-	helper = wincred
 [core]
-  editor = vim -c \"set fenc=utf-8\"
+  editor = vim
   excludesfile = ~/dotfiles/.gitignore
   quotepath = false
 [push]
@@ -32,3 +30,7 @@
   ff = false
 [ghq]
   root = ~/src
+[ghq "ssh://git@github.morpho.local/"]
+  vcs = git
+[ghq "https://ec2-52-198-151-12.ap-northeast-1.compute.amazonaws.com"]
+  vcs = git
