@@ -52,13 +52,14 @@ if g:plug.ready()
     call plug#begin(g:plug.base)
 
     Plug 'itchyny/lightline.vim'
+    Plug 'w0ng/vim-hybrid'
+    Plug 'jonathanfilip/vim-lucius'
+    Plug 'cocopon/iceberg.vim'
 
     Plug 'tyru/caw.vim'
     Plug 'junegunn/fzf'
     Plug 'junegunn/fzf.vim'
     Plug 'osyo-manga/vim-over'
-
-    Plug 'w0ng/vim-hybrid'
 
     Plug 'dag/vim-fish', {'for': ['fish', 'vim']}
     Plug 'Vimjas/vim-python-pep8-indent', {'for': ['python', 'vim']}
@@ -135,9 +136,27 @@ set laststatus=2
 set showmatch
 set nowrap
 set background=dark
+silent! colorscheme elflord
 if g:plug.is_installed('hybrid')
-    colorscheme hybrid
+            \ && 0
+    silent! colorscheme hybrid
+    "" 背景透過 autocmdによって別のスキーマにしても反映される
+    aug Color
+        au!
+        au ColorScheme * hi! Normal      ctermbg=NONE guibg=NONE
+        au ColorScheme * hi! NonText     ctermbg=NONE guibg=NONE
+        au ColorScheme * hi! LineNr      ctermbg=NONE guibg=NONE
+        au ColorScheme * hi! Folded      ctermbg=NONE guibg=NONE
+        au ColorScheme * hi! EndOfBuffer ctermbg=NONE guibg=NONE
+    aug END
 endif
+if g:plug.is_installed('iceberg')
+    silent! colorscheme iceberg
+endif
+if g:plug.is_installed('lightline')
+    let g:lightline = {'colorscheme': 'Tomorrow'}
+endif
+"" vimdiff
 hi DiffAdd    cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
 hi DiffDelete cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
 hi DiffChange cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
