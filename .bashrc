@@ -145,4 +145,6 @@ if ! shopt -oq posix; then
         _source_file /etc/bash_completion
 fi
 
+_source_file $HOME/.fzf.bash
+
 unset -f _source_file
