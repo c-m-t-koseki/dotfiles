@@ -11,6 +11,13 @@ _export_var() {
 
 _export_var PATH $HOME/bin
 _export_var PATH $HOME/.local/bin
+_export_var PATH $HOME/opt/bin
+_export_var PATH /usr/local/go/bin && \
+    _export_var GOPATH $HOME/go && \
+    _export_var PATH $GOPATH/bin
+# _export_var LD_LIBRARY_PATH /usr/local/cuda/lib64 && \
+    # _export_var PATH /usr/local/cuda/bin/
+_export_var LD_LIBRARY_PATH /usr/local/lib/cudnn_v7
 
 unset -f _export_var
 
