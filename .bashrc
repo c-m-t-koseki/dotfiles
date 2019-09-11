@@ -101,6 +101,7 @@ _source_file() {
 }
 
 stty werase undef
+bind -x '"\ea": activate'
 bind '"\C-w": unix-filename-rubout'
 bind '"\C-i": menu-complete'
 bind '"\ee": edit-and-execute-command'

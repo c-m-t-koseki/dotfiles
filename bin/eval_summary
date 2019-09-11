@@ -1,0 +1,7 @@
+#!/bin/bash
+
+for f in $@; do
+    echo $f;
+    cat $f | grep -e num_gt -e AP | grep -v 'num_gt: 0' | perl -ple "s/\d+\s: (\w+).*AP: ([\w\.]+).*/\1: \2/" | column -t;
+    echo;
+done
