@@ -3,15 +3,29 @@ set main-view = id author commit-title:graph=yes,refs=yes
 # 垂直分割時の比率
 set split-view-width = 75%
 
+bind generic K view-help
+
+bind generic h  scroll-left
+bind generic j  move-down
+bind generic k  move-up
+bind generic l  scroll-right
 
 bind generic <Ctrl-b> scroll-page-up
 bind generic <Ctrl-f> scroll-page-down
-bind generic G move-last-line
-bind generic G none
-bind generic g move-first-line
+bind generic g  none
+bind generic gg move-first-line
+bind generic G  move-last-line
+bind main    G  move-last-line
 
-bind main    E !git rebase -i %(commit)
+bind main    gr  !git rebase -i %(commit)~
+bind main    gv ?!git revert %(commit)
+bind main    gc ?!git checkout %(commit)
+bind main    Y  @!bash -c "echo -n '%(commit)' | xsel -bi"
 
+bind generic <Ctrl-h> <Backspace>
+bind generic ; prompt
+
+bind status  D ?rm %(file)
 
 ########
 # branch view
