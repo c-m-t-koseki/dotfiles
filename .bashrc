@@ -16,8 +16,9 @@ HISTCONTROL=ignoreboth
 shopt -s histappend
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=1000
-HISTFILESIZE=2000
+HISTTIMEFORMAT='%F %T'
+HISTSIZE=100000
+HISTFILESIZE=2000000
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -25,7 +26,7 @@ shopt -s checkwinsize
 
 # If set, the pattern "**" used in a pathname expansion context will
 # match all files and zero or more directories and subdirectories.
-#shopt -s globstar
+shopt -s globstar
 
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
@@ -58,8 +59,10 @@ fi
 
 if [ "$color_prompt" = yes ]; then
     PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\h \[\033[01;34m\]$(dirs +0 | perl -ple "s!\.*([^/])[^/]+/!\$1/!g")\[\033[35m\]$(__git_ps1)\[\033[00m\] \$ '
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+    PS1='${debian_chroot:+($debian_chroot)}\h $(dirs +0 | perl -ple "s!\.*([^/])[^/]+/!\$1/!g")$(__git_ps1) \$ '
 fi
 unset color_prompt force_color_prompt
 
@@ -84,11 +87,8 @@ if [ -x /usr/bin/dircolors ]; then
     alias egrep='egrep --color=auto'
 fi
 
-# colored GCC warnings and errors
-#export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
-
 # some more ls aliases
-alias ll='ls -alF'
+alias ll='ls -AlF'
 alias la='ls -A'
 alias l='ls -CF'
 
@@ -96,22 +96,57 @@ alias l='ls -CF'
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
+_source_file() {
+    [ -f $1 ] && source $1
+}
+
+stty werase undef
+bind -x '"\ea": activate'
+bind '"\C-w": unix-filename-rubout'
+bind '"\C-i": menu-complete'
+bind '"\ee": edit-and-execute-command'
+bind 'set completion-ignore-case on'
+bind 'set show-all-if-ambiguous on'
+bind 'set menu-complete-display-prefix on'
+bind 'set colored-stats On'
+
+cd() {
+    dir_prev=($(pwd) "${dir_prev[@]}")
+    dir_next=()
+    builtin cd "$@"
+}
+prevd() {
+    if [[ ${#dir_prev[@]} > 0 ]]; then
+        dir_next=($(pwd) "${dir_next[@]}")
+        builtin cd "${dir_prev[0]}"
+        dir_prev=("${dir_prev[@]:1}")
+    fi
+}
+nextd() {
+    if [[ ${#dir_next[@]} > 0 ]]; then
+        dir_prev=($(pwd) "${dir_next[@]}")
+        builtin cd "${dir_next[0]}"
+        dir_next=("${dir_prev[@]:1}")
+    fi
+}
+
 # Alias definitions.
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
 
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
-fi
+_source_file ~/.bash_aliases
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
 if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-  fi
+    _source_file /usr/share/bash-completion/bash_completion || \
+        _source_file /etc/bash_completion
 fi
+
+_source_file $HOME/.fzf.bash
+
+_source_file $HOME/.local/.bashrc
+
+unset -f _source_file

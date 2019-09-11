@@ -1,0 +1,5 @@
+#!/bin/bash
+
+tmp=$(find ~/virtualenv/* -prune -type d | xargs -n1 basename | fzf --height 10 --query "$1")
+[ -z "$tmp" ] && return 0
+source ~/virtualenv/$tmp/bin/activate

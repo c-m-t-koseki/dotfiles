@@ -1,0 +1,5 @@
+#!/bin/bash
+
+tmp=$(ghq list | fzf --height 5 --query "$1")
+[ -z "$tmp" ] && return 0
+cd $(ghq root)/$tmp
