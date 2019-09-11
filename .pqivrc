@@ -1,0 +1,14 @@
+[keybindings]
+h {goto_file_relative(-1)}
+l {goto_file_relative(1)}
+k {goto_file_relative(-1)}
+j {goto_file_relative(1)}
+<Left> {goto_file_relative(-1)}
+<Right> {goto_file_relative(1)}
+
+@MONTAGE {
+    h {montage_mode_shift_x(-1)}
+    j {montage_mode_shift_y(1)}
+    k {montage_mode_shift_y(-1)}
+    l {montage_mode_shift_x(1)}
+}
