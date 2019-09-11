@@ -24,7 +24,8 @@ if g:plug.ready()
 
     Plug 'w0ng/vim-hybrid'
 
-    Plug 'dag/vim-fish'
+    Plug 'dag/vim-fish', {'for': ['fish', 'vim']}
+    Plug 'Vimjas/vim-python-pep8-indent', {'for': ['python', 'vim']}
 
     call plug#end()
 endif
