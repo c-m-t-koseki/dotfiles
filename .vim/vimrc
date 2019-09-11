@@ -63,6 +63,7 @@ if g:plug.ready()
     Plug 'osyo-manga/vim-over'
     Plug 'thinca/vim-quickrun'
     Plug 'kana/vim-submode'
+    Plug 'tpope/vim-fugitive'
 
     Plug 'dag/vim-fish', {'for': ['fish', 'vim']}
     Plug 'Vimjas/vim-python-pep8-indent', {'for': ['python', 'vim']}
