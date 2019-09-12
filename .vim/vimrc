@@ -51,7 +51,8 @@ endif
 if g:plug.ready()
     call plug#begin(g:plug.base)
 
-    Plug 'itchyny/lightline.vim'
+    " Plug 'itchyny/lightline.vim'
+    Plug 'vim-airline/vim-airline'
     Plug 'w0ng/vim-hybrid'
     Plug 'jonathanfilip/vim-lucius'
     Plug 'cocopon/iceberg.vim'
@@ -160,6 +161,26 @@ if g:plug.is_installed('iceberg')
 endif
 if g:plug.is_installed('lightline')
     let g:lightline = {'colorscheme': 'Tomorrow'}
+endif
+if g:plug.is_installed('airline')
+    let g:airline_powerline_fonts = 1
+    let g:airline_right_sep = ' '
+    let g:airline_section_z = '%#__accent_bold#%{g:airline_symbols.linenr}%4l/%L%#__restore__# :%3v'
+    let g:airline#extensions#virtualenv#enabled = 0
+    let g:airline_symbols = {'maxlinenr': ''}
+    let g:airline#extensions#default#layout = [
+                \ [ 'a', 'c' ],
+                \ [ 'x', 'y', 'z', 'error', 'warning' ]
+                \ ]
+
+    aug Air
+        au!
+        function! AirlineInit()
+            let g:airline_section_c = airline#section#create(['%t ', 'readonly'])
+            let g:airline_section_z = airline#section#create(['linenr', 'maxlinenr', ':%3v'])
+        endfunction
+        autocmd User AirlineAfterInit call AirlineInit()
+    aug END
 endif
 "" vimdiff
 hi DiffAdd    cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
