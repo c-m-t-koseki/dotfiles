@@ -100,7 +100,7 @@ inoremap jk <ESC>
 onoremap jk <ESC>
 nnoremap q; q:
 nnoremap <silent><Esc><Esc> :nohlsearch<CR>
-tnoremap <ESC> <C-\><C-n>
+tnoremap g[ <C-\><C-n>
 
 "" tab
 noremap gn gt
