@@ -1,85 +1,4 @@
-" plug {{{
-let g:plug = {
-            \ "plug" : expand("~/.vim") . "/autoload/plug.vim",
-            \ "base" : expand("~/.vim") . "/plugged",
-            \ "url"  : "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim",
-            \ }
-
-function! g:plug.ready()
-    return filereadable(self.plug)
-endfunction
-
-function! g:plug.is_installed(...)
-    let list = a:000
-
-    for arg in list
-        let name   = substitute(arg, '^vim-\|\.vim$', '', 'g')
-        let prefix = 'vim-' . name
-        let suffix = name . '.vim'
-        if v:false ||
-                    \ has_key(self.plugs, name  ) ? isdirectory(self.plugs[name  ].dir) :
-                    \ has_key(self.plugs, prefix) ? isdirectory(self.plugs[prefix].dir) :
-                    \ has_key(self.plugs, suffix) ? isdirectory(self.plugs[suffix].dir) :
-                    \ v:false
-            continue
-        else
-            return v:false
-        endif
-    endfor
-
-    return v:true
-endfunction
-
-if !g:plug.ready()
-    function! g:plug.init()
-        call system(printf("curl -fLo %s --create-dirs %s", self.plug, self.url))
-        if v:shell_error
-            echohl ErrorMsg
-            echo printf('Error: g:plug.init: error occured(%d)', v:shell_error)
-            echohl NONE
-            return v:false
-        endif
-        echomsg 'vim-plug installed!'
-    endfunction
-
-    command! PlugInit call g:plug.init()
-    if confirm('Install vim-plug?', "y\nn", 'Question') == 1
-        PlugInit
-    endif
-endif
-
-if g:plug.ready()
-    call plug#begin(g:plug.base)
-
-    " Plug 'itchyny/lightline.vim'
-    Plug 'vim-airline/vim-airline'
-    Plug 'w0ng/vim-hybrid'
-    Plug 'jonathanfilip/vim-lucius'
-    Plug 'cocopon/iceberg.vim'
-
-    Plug 'tyru/caw.vim'
-    Plug 'junegunn/vim-easy-align'
-    Plug '$HOME/src/github.com/junegunn/fzf'
-    Plug 'junegunn/fzf.vim'
-    Plug 'osyo-manga/vim-over'
-    Plug 'thinca/vim-quickrun'
-    Plug 'kana/vim-submode'
-    Plug 'tpope/vim-fugitive'
-
-    Plug 'w0rp/ale', {'for': ['python', 'c', 'cpp', 'vim']}
-    Plug 'prabirshrestha/async.vim'
-    " Plug 'prabirshrestha/vim-lsp', {'for': ['python', 'c', 'cpp', 'vim']}
-    Plug 'prabirshrestha/asyncomplete.vim'
-    " Plug 'prabirshrestha/asyncomplete-lsp.vim'
-
-    Plug 'dag/vim-fish', {'for': ['fish', 'vim']}
-    Plug 'Vimjas/vim-python-pep8-indent', {'for': ['python', 'vim']}
-
-    call plug#end()
-endif
-
-let g:plug.plugs = get(g:, 'plugs', {})
-" }}}
+source $VIMRUNTIME/defaults.vim
 
 " keymap {{{
 "" prefix
@@ -195,17 +114,17 @@ set hidden
 " }}}
 
 " plugin {{{
-if g:plug.is_installed('caw')
+if "caw"
     map <C-k> <Plug>(caw:hatpos:toggle)
 endif
 
-if g:plug.is_installed('easy-align')
+if "easy-align"
     let g:easy_align_delimiters={'\\': {'pattern': '\\'}}
     xmap g= <Plug>(EasyAlign)
     xmap g\ <Plug>(EasyAlign)- 
 endif
 
-if g:plug.is_installed('fzf')
+if "fzf"
     nnoremap <silent>[Space]b :<C-u>Buffers<CR>
     nnoremap <silent>[Space]x :<C-u>Commands<CR>
     nnoremap <silent>[Space]f :<C-u>GFiles<CR>
@@ -215,7 +134,7 @@ if g:plug.is_installed('fzf')
     nnoremap <silent>[Space]/ :<C-u>call fzf#vim#buffer_lines('', {'options': '--bind alt-enter:select-all+accept'})<CR>
 endif
 
-if g:plug.is_installed('quickrun')
+if "quickrun"
     nnoremap <silent>[Space]i :QuickRun -mode n<CR>
     vnoremap <silent>[Space]i :QuickRun -mode v<CR>
     let g:quickrun_no_default_key_mappings = 1
@@ -228,11 +147,11 @@ if g:plug.is_installed('quickrun')
 endif
 
 
-if g:plug.is_installed('asyncomplete')
+if 'asyncomplete'
     let g:asyncomplete_auto_completeopt = 0
 endif
 
-if g:plug.is_installed('lsp')
+if "lsp"
     aug Lsp
         au!
         if executable($HOME.'/virtualenv/vim/bin/pyls')
@@ -261,6 +180,10 @@ if g:plug.is_installed('lsp')
             let g:lsp_diagnostics_enabled = 0
             let g:lsp_auto_enable = 1
 
+            packadd vim-lsp
+            packadd asyncomplete.vim
+            packadd asyncomplete-lsp.vim
+
             " let g:lsp_log_verbose = 1
             " let g:lsp_log_file = expand('~/vim-lsp.log')
         endfunction
@@ -280,8 +203,4 @@ function! s:Jq(...)
     execute "%! jq \"" . l:arg . "\""
 endfunction
 
-syntax enable
-filetype plugin indent on
 set secure
-
-" vim: set fdm=marker nofen:
