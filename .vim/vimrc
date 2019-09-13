@@ -176,7 +176,7 @@ if g:plug.is_installed('airline')
     aug Air
         au!
         function! AirlineInit()
-            let g:airline_section_c = airline#section#create(['%t ', 'readonly'])
+            let g:airline_section_c = airline#section#create(['%t%m ', 'readonly'])
             let g:airline_section_z = airline#section#create(['linenr', 'maxlinenr', ':%3v'])
         endfunction
         autocmd User AirlineAfterInit call AirlineInit()
