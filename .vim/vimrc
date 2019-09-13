@@ -339,7 +339,7 @@ if g:plug.is_installed('lsp')
                         \ 'cmd': {server_info->[$HOME.'/virtualenv/vim/bin/pyls']},
                         \ 'whitelist': ['python'],
                         \ })
-            au FileType python call s:configure_lsp() | call lsp#enable()
+            au FileType python call s:configure_lsp()
         endif
         if executable($HOME.'/src/github.com/cquery-project/cquery/build/release/bin/cquery')
             au User lsp_setup call lsp#register_server({
@@ -367,7 +367,7 @@ if g:plug.is_installed('lsp')
             " nnoremap <buffer> <F1> :<C-u>LspImplementation<CR>
             " nnoremap <buffer> <F2> :<C-u>LspRename<CR>
             let g:lsp_diagnostics_enabled = 0
-            let g:lsp_auto_enable = 0
+            let g:lsp_auto_enable = 1
 
             " let g:lsp_log_verbose = 1
             " let g:lsp_log_file = expand('~/vim-lsp.log')
