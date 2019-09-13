@@ -61,14 +61,18 @@ set laststatus=2
 set showmatch
 set nowrap
 set background=dark
-silent! colorscheme elflord
-if g:plug.is_installed('hybrid')
-            \ && 0
-    silent! colorscheme hybrid
+
+let s:colors = split(globpath(&rtp, "colors/*.vim"), "\n")
+if has('packages')
+    let s:colors += split(globpath(&packpath, "pack/*/start/colors/*.vim"), "\n")
 endif
-if g:plug.is_installed('iceberg')
-    silent! colorscheme iceberg
-endif
+let s:colors = map(uniq(s:colors), 'fnamemodify(v:val, ":t:r")')
+for c in ['iceberg', 'hybrid', 'lucius', 'elflord']
+    if count(s:colors, c)
+        execute 'colorscheme ' . c
+        break
+    endif
+endfor
 "" vimdiff
 hi DiffAdd    cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
 hi DiffDelete cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
