@@ -129,6 +129,16 @@ nextd() {
         dir_next=("${dir_prev[@]:1}")
     fi
 }
+gcd() {
+    tmp=$(ghq list | fzf --height 5 --query "$1")
+    [ -z "$tmp" ] && return 0
+    builtin cd $(ghq root)/$tmp
+}
+activate() {
+    tmp=$(find ~/virtualenv/* -prune -type d | xargs -n1 basename | fzf --height 10 --query "$1")
+    [ -z "$tmp" ] && return 0
+    source ~/virtualenv/$tmp/bin/activate
+}
 
 # Alias definitions.
 # You may want to put all your additions into a separate file like
