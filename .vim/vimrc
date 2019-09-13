@@ -146,41 +146,9 @@ silent! colorscheme elflord
 if g:plug.is_installed('hybrid')
             \ && 0
     silent! colorscheme hybrid
-    "" 背景透過 autocmdによって別のスキーマにしても反映される
-    aug Color
-        au!
-        au ColorScheme * hi! Normal      ctermbg=NONE guibg=NONE
-        au ColorScheme * hi! NonText     ctermbg=NONE guibg=NONE
-        au ColorScheme * hi! LineNr      ctermbg=NONE guibg=NONE
-        au ColorScheme * hi! Folded      ctermbg=NONE guibg=NONE
-        au ColorScheme * hi! EndOfBuffer ctermbg=NONE guibg=NONE
-    aug END
 endif
 if g:plug.is_installed('iceberg')
     silent! colorscheme iceberg
-endif
-if g:plug.is_installed('lightline')
-    let g:lightline = {'colorscheme': 'Tomorrow'}
-endif
-if g:plug.is_installed('airline')
-    let g:airline_powerline_fonts = 1
-    let g:airline_right_sep = ' '
-    let g:airline_section_z = '%#__accent_bold#%{g:airline_symbols.linenr}%4l/%L%#__restore__# :%3v'
-    let g:airline#extensions#virtualenv#enabled = 0
-    let g:airline_symbols = {'maxlinenr': ''}
-    let g:airline#extensions#default#layout = [
-                \ [ 'a', 'c' ],
-                \ [ 'x', 'y', 'z', 'error', 'warning' ]
-                \ ]
-
-    aug Air
-        au!
-        function! AirlineInit()
-            let g:airline_section_c = airline#section#create(['%t%m ', 'readonly'])
-            let g:airline_section_z = airline#section#create(['linenr', 'maxlinenr', ':%3v'])
-        endfunction
-        autocmd User AirlineAfterInit call AirlineInit()
-    aug END
 endif
 "" vimdiff
 hi DiffAdd    cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
@@ -247,11 +215,6 @@ if g:plug.is_installed('fzf')
     nnoremap <silent>[Space]/ :<C-u>call fzf#vim#buffer_lines('', {'options': '--bind alt-enter:select-all+accept'})<CR>
 endif
 
-if g:plug.is_installed('vim-over')
-    nnoremap <silent>,/ :OverCommandLine<CR>%s/
-    vnoremap <silent>,/ :OverCommandLine<CR>s/
-endif
-
 if g:plug.is_installed('quickrun')
     nnoremap <silent>[Space]i :QuickRun -mode n<CR>
     vnoremap <silent>[Space]i :QuickRun -mode v<CR>
@@ -264,70 +227,9 @@ if g:plug.is_installed('quickrun')
                 \}
 endif
 
-if g:plug.is_installed('submode')
-    let g:submode_keep_leaving_key = v:true
-    call submode#enter_with('winsize', 'n', '', '<C-w>>', '<C-w>>')
-    call submode#enter_with('winsize', 'n', '', '<C-w><', '<C-w><')
-    call submode#enter_with('winsize', 'n', '', '<C-w>+', '<C-w>+')
-    call submode#enter_with('winsize', 'n', '', '<C-w>-', '<C-w>-')
-    call submode#map('winsize', 'n', '', '>', '<C-w>>')
-    call submode#map('winsize', 'n', '', '<', '<C-w><')
-    call submode#map('winsize', 'n', '', '+', '<C-w>+')
-    call submode#map('winsize', 'n', '', '-', '<C-w>-')
-endif
 
 if g:plug.is_installed('asyncomplete')
     let g:asyncomplete_auto_completeopt = 0
-endif
-
-if g:plug.is_installed('ale')
-    let g:ale_python_pyls_executable = $HOME.'/virtualenv/vim/bin/pyls'
-    let g:ale_python_pyls_config = {
-                \ 'pyls' : {
-                \    'configurationSources': ['flake8'],
-                \    }
-                \ }
-    let g:ale_python_flake8_executable = $HOME.'/virtualenv/vim/bin/flake8'
-    let g:ale_python_autopep8_executable = $HOME.'/virtualenv/vim/bin/autopep8'
-    let g:ale_python_isort_executable = $HOME.'/virtualenv/vim/bin/isort'
-    let g:ale_c_cquery_cache_directory = '/tmp/cquery/cache/'
-    let g:ale_c_cquery_executable = $HOME.'/src/github.com/cquery-project/cquery/build/release/bin/cquery'
-    let g:ale_c_clangd_executable = $HOME.'/src/github.com/cquery-project/cquery/build/clang+llvm-7.0.0-x86_64-linux-gnu-ubuntu-14.04/bin/clangd'
-    let g:ale_cpp_cquery_executable = g:ale_c_cquery_executable
-    let g:ale_cpp_clangd_executable = g:ale_c_clangd_executable
-    let g:ale_c_parse_compile_commands = 1
-    let g:ale_c_build_dir_names = ['build', 'sample']
-    let g:ale_lint_on_save = 1
-    let g:ale_lint_on_text_changed = 'normal'
-    let g:ale_linters = {
-                \   'python': ['pyls'],
-                \   'c': ['cquery'],
-                \   'cpp': ['cquery'],
-                \ }
-    let g:ale_fix_on_save = 0
-    let g:ale_fixers = {
-                \   'python': ['autopep8', 'isort'],
-                \ }
-    let g:ale_warn_about_trailing_whitespace = 1
-    let g:ale_sign_column_always = 1
-
-    let g:ale_completion_enabled = 1
-    function! s:configure_ale()
-        set omnifunc=ale#completion#OmniFunc
-
-        nmap <buffer>[Space]n <Plug>(ale_next)
-        nmap <buffer>[Space]p <Plug>(ale_previous)
-        nmap <buffer>K <Plug>(ale_hover)
-        nmap <buffer><C-]> <Plug>(ale_go_to_definition)
-    endfunction
-    au FileType python,c,cpp call s:configure_ale()
-
-    " aug ale
-    "     au!
-    "     au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#ale#get_source_options({
-    "                \ 'priority': 10, " Provide your own overrides here
-    "                \ }))
-    " aug END
 endif
 
 if g:plug.is_installed('lsp')
@@ -340,16 +242,6 @@ if g:plug.is_installed('lsp')
                         \ 'whitelist': ['python'],
                         \ })
             au FileType python call s:configure_lsp()
-        endif
-        if executable($HOME.'/src/github.com/cquery-project/cquery/build/release/bin/cquery')
-            au User lsp_setup call lsp#register_server({
-                      \ 'name': 'cquery',
-                      \ 'cmd': {server_info->[$HOME.'/src/github.com/cquery-project/cquery/build/release/bin/cquery']},
-                      \ 'root_uri': {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'compile_commands.json'))},
-                      \ 'initialization_options': { 'cacheDirectory': '/tmp/cquery/cache' },
-                      \ 'whitelist': ['c', 'cpp'],
-                      \ })
-            au FileType c,cpp call s:configure_lsp() | call lsp#enable()
         endif
 
         function! s:configure_lsp() abort
