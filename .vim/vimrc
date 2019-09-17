@@ -80,27 +80,26 @@ hi DiffChange cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
 hi DiffText   cterm=bold ctermfg=10 ctermbg=88 gui=none guifg=bg guibg=Red
 "" status line
 let s:modemap = {
-            \ 'n':  {'t': 'NORMAL',   'c': 'Normal'},
-            \ 'i':  {'t': 'INSERT',   'c': 'Insert'},
-            \ 'v':  {'t': 'VISUAL',   'c': 'Visual'},
-            \ 'V':  {'t': 'V-LINE',   'c': 'Visual'},
-            \ '': {'t': 'V-BLOCK',  'c': 'Visual'},
-            \ 'R':  {'t': 'REPLACE',  'c': 'Replace'},
-            \ 'c':  {'t': 'COMMAND',  'c': 'Normal'},
-            \ 't':  {'t': 'TERMINAL', 'c': 'Normal'},
+            \ 'n':  'NORMAL',
+            \ 'i':  'INSERT',
+            \ 'v':  'VISUAL',
+            \ 'V':  'V-LINE',
+            \ '': 'V-BLOCK',
+            \ 'R':  'REPLACE',
+            \ 'c':  'COMMAND',
+            \ 't':  'TERMINAL',
             \ }
 function! Statusline_mode()
+    return get(s:modemap, mode(1), 'None' . mode(1))
+endfunction
+function! Statusline_mode2()
     let l:mode = get(s:modemap, mode(1), {'t': 'a', 'c':'statusline'})
     let l:stl = '%#SL' . l:mode.c . '# ' . l:mode.t . ' %0* '
     let l:stl = l:stl . '%f%=%{&ft} %{&enc}[%{&ff}] '
     let l:stl = l:stl . '☰ %4l/%L:%3c'
     return l:stl
 endfunction
-hi SLNormal  cterm=bold guifg=#17171b guibg=#818596 ctermfg=234 ctermbg=245
-hi SLInsert  cterm=bold guifg=#161821 guibg=#84a0c6 ctermfg=234 ctermbg=110
-hi SLVisual  cterm=bold guifg=#161821 guibg=#b4be82 ctermfg=234 ctermbg=150
-hi SLReplace cterm=bold guifg=#161821 guibg=#e2a478 ctermfg=234 ctermbg=216
-set stl=%!Statusline_mode()
+set statusline=\ %{Statusline_mode()}\ %t%m%r
 
 "" tab string
 set list
