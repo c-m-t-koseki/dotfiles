@@ -155,7 +155,9 @@ if ! shopt -oq posix; then
         _source_file /etc/bash_completion
 fi
 
-_source_file $HOME/.fzf.bash
+# fzf
+[[ $- == *i* ]] && _source_file "/home/t-koseki/src/github.com/junegunn/fzf/shell/completion.bash" 2> /dev/null
+_source_file "/home/t-koseki/src/github.com/junegunn/fzf/shell/key-bindings.bash"
 
 _source_file $HOME/.local/.bashrc
 

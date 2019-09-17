@@ -59,7 +59,7 @@ if g:plug.ready()
 
     Plug 'tyru/caw.vim'
     Plug 'junegunn/vim-easy-align'
-    Plug 'junegunn/fzf'
+    Plug '$HOME/src/github.com/junegunn/fzf'
     Plug 'junegunn/fzf.vim'
     Plug 'osyo-manga/vim-over'
     Plug 'thinca/vim-quickrun'
