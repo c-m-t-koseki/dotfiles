@@ -9,17 +9,17 @@ export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quo
 
 _export_var() {
     [ ! -d $2 ] && return 1
-    [ -n "$(eval echo \$$1)" ] \
-        && eval "export $1=$2:\$$1" \
-        || eval "export $1=$2"
+    [[ $3 == - ]]                             \
+        && eval "export $1=$2\${$1:+:\${$1}}" \
+        || eval "export $1=\${$1:+\${$1}:}$2"
     return 0
 }
 
 _export_var PATH $HOME/bin
 _export_var PATH $HOME/.local/bin
-_export_var PATH $HOME/opt/bin
+_export_var PATH $HOME/opt/bin -
 _export_var PATH /usr/local/go/bin && \
-    _export_var GOPATH $HOME/go && \
+    _export_var GOPATH $HOME/go    && \
     _export_var PATH $GOPATH/bin
 _export_var PATH $HOME/src/github.com/junegunn/fzf/bin
 # _export_var LD_LIBRARY_PATH /usr/local/cuda/lib64 && \
