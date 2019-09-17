@@ -1,0 +1,6 @@
+[submodule ".vim/pack/ux/start"]
+	path = .vim/pack/ux/start
+	url = https://github.com/cocopon/iceberg.vim.git
+[submodule ".vim/pack/ux/start/iceberg"]
+	path = .vim/pack/ux/start/iceberg
+	url = https://github.com/cocopon/iceberg.vim.git
