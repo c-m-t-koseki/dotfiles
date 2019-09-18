@@ -78,6 +78,7 @@ endfor
 " hi DiffDelete cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
 " hi DiffChange cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
 " hi DiffText   cterm=bold ctermfg=10 ctermbg=88 gui=none guifg=bg guibg=Red
+
 "" status line
 let s:modemap = {
             \ 'n':  'NORMAL',
@@ -89,17 +90,25 @@ let s:modemap = {
             \ 'c':  'COMMAND',
             \ 't':  'TERMINAL',
             \ }
-function! Statusline_mode()
-    return get(s:modemap, mode(1), 'None' . mode(1))
+function! StatusLine_mode()
+    return get(s:modemap, mode(1), "None")
 endfunction
-function! Statusline_mode2()
-    let l:mode = get(s:modemap, mode(1), {'t': 'a', 'c':'statusline'})
-    let l:stl = '%#SL' . l:mode.c . '# ' . l:mode.t . ' %0* '
-    let l:stl = l:stl . '%f%=%{&ft} %{&enc}[%{&ff}] '
-    let l:stl = l:stl . '☰ %4l/%L:%3c'
-    return l:stl
+function! StatusLine_fileinfo()
+    let s:stl = '| '
+    if len(&ft) > 0
+        let s:stl .= &ft . ' | '
+    endif
+    let s:stl .= &enc.'['.&ff.']'
+    return s:stl
 endfunction
-set statusline=\ %{Statusline_mode()}\ %t%m%r
+" let s:default_stl = matchstr(execute('hi StatusLine'), '\(term\|cterm\|gui\).*')
+" execute('hi User1 ' . s:default_stl)
+" set stl=%{StatusLine_mode}
+set stl=\ %{StatusLine_mode()}
+set stl+=\ \|\ %t%m
+set stl+=%=
+set stl+=%{StatusLine_fileinfo()}
+set stl+=\ \|%4l/%4L:%-3c
 
 "" tab string
 set list
