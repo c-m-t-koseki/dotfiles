@@ -205,6 +205,7 @@ set nobackup
 "" complete
 set isfname-==
 set completeopt=menuone,noinsert,noselect
+set pumheight=7
 set dict=/usr/share/dict/words
 
 "" indent
