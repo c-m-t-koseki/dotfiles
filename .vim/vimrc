@@ -66,11 +66,11 @@ if g:plug.ready()
     Plug 'kana/vim-submode'
     Plug 'tpope/vim-fugitive'
 
-    Plug 'w0rp/ale', {'for': ['python', 'c', 'cpp', 'vim']}
+    " Plug 'dense-analysis/ale', {'for': ['python', 'c', 'cpp', 'typescript', 'vim']}
     Plug 'prabirshrestha/async.vim'
-    " Plug 'prabirshrestha/vim-lsp', {'for': ['python', 'c', 'cpp', 'vim']}
+    Plug 'prabirshrestha/vim-lsp', {'for': ['c', 'cpp', 'python', 'vim']}
     Plug 'prabirshrestha/asyncomplete.vim'
-    " Plug 'prabirshrestha/asyncomplete-lsp.vim'
+    Plug 'prabirshrestha/asyncomplete-lsp.vim'
 
     Plug 'dag/vim-fish', {'for': ['fish', 'vim']}
     Plug 'Vimjas/vim-python-pep8-indent', {'for': ['python', 'vim']}
