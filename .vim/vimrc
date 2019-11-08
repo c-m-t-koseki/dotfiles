@@ -87,6 +87,7 @@ nmap <Space> [Space]
 xmap <Space> [Space]
 nnoremap [Space] <Nop>
 xnoremap [Space] <Nop>
+noremap <silent>Q <C-w>z:cclose<CR>:lclose<CR>
 
 "" vimrc
 nnoremap <silent>,e :<C-u>e $MYVIMRC<CR>
