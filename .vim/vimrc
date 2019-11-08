@@ -233,7 +233,7 @@ endif
 if g:plug.is_installed('easy-align')
     let g:easy_align_delimiters={'\\': {'pattern': '\\'}}
     xmap g= <Plug>(EasyAlign)
-    xmap g\ <Plug>(EasyAlign)- 
+    xmap g\ <Plug>(EasyAlign)- |
 endif
 
 if g:plug.is_installed('fzf')
