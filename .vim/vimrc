@@ -297,8 +297,17 @@ if g:plug.is_installed('ale')
     let g:ale_cpp_clangd_executable = g:ale_c_clangd_executable
     let g:ale_c_parse_compile_commands = 1
     let g:ale_c_build_dir_names = ['build', 'sample']
+    let g:ale_lint_on_enter = 1
+    let g:ale_lint_on_text_changed = 1
+    let g:ale_lint_on_insert_leave = 0
     let g:ale_lint_on_save = 1
-    let g:ale_lint_on_text_changed = 'normal'
+    set signcolumn=yes
+    " let g:ale_sign_column_always = 1
+    " let g:ale_linters = {
+    "            \   'python': ['pyls'],
+    "            \   'c': ['clangd'],
+    "            \   'cpp': ['clangd'],
+    "            \ }
     let g:ale_linters = {
                 \   'python': ['pyls'],
                 \   'c': ['cquery'],
@@ -309,7 +318,6 @@ if g:plug.is_installed('ale')
                 \   'python': ['autopep8', 'isort'],
                 \ }
     let g:ale_warn_about_trailing_whitespace = 1
-    let g:ale_sign_column_always = 1
 
     let g:ale_completion_enabled = 1
     function! s:configure_ale()
@@ -320,7 +328,8 @@ if g:plug.is_installed('ale')
         nmap <buffer>K <Plug>(ale_hover)
         nmap <buffer><C-]> <Plug>(ale_go_to_definition)
     endfunction
-    au FileType python,c,cpp call s:configure_ale()
+    " au FileType python,c,cpp,typescript call s:configure_ale()
+    au FileType python,c,cpp,typescript call s:configure_ale()
 
     " aug ale
     "     au!
