@@ -131,7 +131,6 @@ noremap <C-p> :cpre<CR>
 "" nop
 nnoremap ZZ <NOP>
 nnoremap ZQ <NOP>
-nnoremap Q  <NOP>
 " }}}
 
 " options {{{
