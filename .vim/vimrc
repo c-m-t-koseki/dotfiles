@@ -276,6 +276,7 @@ if g:plug.is_installed('submode')
 endif
 
 if g:plug.is_installed('asyncomplete')
+    let g:asyncomplete_auto_popup = 1
     let g:asyncomplete_auto_completeopt = 0
 endif
 
