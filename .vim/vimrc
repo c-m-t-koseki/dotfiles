@@ -87,7 +87,6 @@ nmap <Space> [Space]
 xmap <Space> [Space]
 nnoremap [Space] <Nop>
 xnoremap [Space] <Nop>
-set termwinkey=<C-A-T>
 
 "" vimrc
 nnoremap <silent>,e :<C-u>e $MYVIMRC<CR>
