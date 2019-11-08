@@ -1,10 +1,12 @@
 #!/bin/bash
 set -e
 
-./configure --with-features=huge \
-    --enable-pythoninterp        \
-    --enable-python3interp       \
-    --without-x                  \
-    --enable-gui=no              \
-    --enable-fail-if-missing
-make -j8
+./configure                        \
+    --with-features=huge           \
+    --enable-pythoninterp=dynamic  \
+    --enable-python3interp=dynamic \
+    --enable-fail-if-missing       \
+    --enable-gui=no                \
+    # --without-x                  \
+
+# make -j8
