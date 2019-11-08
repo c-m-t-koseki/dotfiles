@@ -281,15 +281,11 @@ if g:plug.is_installed('asyncomplete')
 endif
 
 if g:plug.is_installed('ale')
-    let g:ale_python_pyls_executable = $HOME.'/virtualenv/vim/bin/pyls'
     let g:ale_python_pyls_config = {
                 \ 'pyls' : {
                 \    'configurationSources': ['flake8'],
                 \    }
                 \ }
-    let g:ale_python_flake8_executable = $HOME.'/virtualenv/vim/bin/flake8'
-    let g:ale_python_autopep8_executable = $HOME.'/virtualenv/vim/bin/autopep8'
-    let g:ale_python_isort_executable = $HOME.'/virtualenv/vim/bin/isort'
     let g:ale_c_cquery_cache_directory = '/tmp/cquery/cache/'
     let g:ale_c_cquery_executable = $HOME.'/src/github.com/cquery-project/cquery/build/release/bin/cquery'
     let g:ale_c_clangd_executable = $HOME.'/src/github.com/cquery-project/cquery/build/clang+llvm-7.0.0-x86_64-linux-gnu-ubuntu-14.04/bin/clangd'
