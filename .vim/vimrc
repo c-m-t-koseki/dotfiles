@@ -66,6 +66,8 @@ if g:plug.ready()
     Plug 'kana/vim-submode'
     Plug 'tpope/vim-fugitive'
 
+    Plug 'mattn/webapi-vim'
+
     " Plug 'dense-analysis/ale', {'for': ['python', 'c', 'cpp', 'typescript', 'vim']}
     Plug 'prabirshrestha/async.vim'
     Plug 'prabirshrestha/vim-lsp', {'for': ['c', 'cpp', 'python', 'vim']}
@@ -273,6 +275,48 @@ if g:plug.is_installed('submode')
     call submode#map('winsize', 'n', '', '<', '<C-w><')
     call submode#map('winsize', 'n', '', '+', '<C-w>+')
     call submode#map('winsize', 'n', '', '-', '<C-w>-')
+endif
+
+if g:plug.is_installed('webapi-vim')
+    function! s:translate(query) abort
+        let ret = webapi#http#get("https://ejje.weblio.jp/content/".a:query)
+        let ret = webapi#html#parse(ret.content)
+        let ret = ret.find('div', {'ID': 'main'})
+        if empty(ret)
+            echom 'not found result: ' . a:query
+            return
+        endif
+        let ret = ret.find('td', {'class': 'content-explanation ej'})
+        if empty(ret)
+            echom 'not found result: ' . a:query
+            return
+        endif
+
+        let winid = popup_create(ret.child[0], {
+                    \ "pos":"topleft",
+                    \ "border": [1, 1, 1, 1],
+                    \ "col":"cursor",
+                    \ "line":"cursor+1",
+                    \ "moved": "any",
+                    \ })
+    endfunction
+
+    function! Get_visual_selection()
+        let [line_start, column_start] = getpos("'<")[1:2]
+        let [line_end, column_end] = getpos("'>")[1:2]
+        let lines = getline(line_start, line_end)
+        if len(lines) == 0
+            return ''
+        endif
+        let lines[-1] = lines[-1][: column_end - (&selection == 'inclusive' ? 1 : 2)]
+        let lines[0] = lines[0][column_start - 1:]
+        return join(lines, "\n")
+    endfunction
+
+    command! -nargs=1 Translate call s:translate(<args>)
+
+    nnoremap <silent>[Space]t :Translate expand("<cword>")<CR>
+    vnoremap <silent>[Space]t :<C-u>Translate expand(Get_visual_selection())<CR>
 endif
 
 if g:plug.is_installed('asyncomplete')
