@@ -76,6 +76,7 @@ if g:plug.ready()
 
     Plug 'dag/vim-fish', {'for': ['fish', 'vim']}
     Plug 'Vimjas/vim-python-pep8-indent', {'for': ['python', 'vim']}
+    Plug 'tpope/vim-markdown', {'for': ['markdown']}
 
     call plug#end()
 endif
