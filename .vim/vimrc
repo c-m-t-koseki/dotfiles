@@ -134,6 +134,14 @@ noremap <C-p> :cpre<CR>
 "" nop
 nnoremap ZZ <NOP>
 nnoremap ZQ <NOP>
+
+"" gdb
+nnoremap <silent>U :Evaluate<CR>
+let g:termdebug_wide = 163
+nnoremap [Space]<Space> :Break<CR>
+aug termdebug
+    au FileType c,cpp :packadd termdebug
+aug END
 " }}}
 
 " options {{{
