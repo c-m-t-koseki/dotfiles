@@ -19,6 +19,7 @@
   cancel = reset --soft HEAD~
   back = reset --hard HEAD~
   lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+  pb = preview-branch
 [core]
   excludesfile = ~/dotfiles/.gitignore
   quotepath = false
