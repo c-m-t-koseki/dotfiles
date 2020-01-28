@@ -30,6 +30,8 @@
 [merge]
   ff = false
 [ghq]
+  root = ~/go/src/github.com
+  root = ~/src/github.morpho.local/t-koseki/dotfiles/.vim/plugged/
   root = ~/src
 [ghq "ssh://git@github.morpho.local/"]
   vcs = git
