@@ -109,6 +109,8 @@ bind 'set completion-ignore-case on'
 bind 'set show-all-if-ambiguous on'
 bind 'set menu-complete-display-prefix on'
 bind 'set colored-stats On'
+bind '"\C-n": history-search-forward'
+bind '"\C-p": history-search-backward'
 
 cd() {
     dir_prev=($(pwd) "${dir_prev[@]}")
