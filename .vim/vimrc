@@ -68,11 +68,11 @@ if g:plug.ready()
 
     Plug 'mattn/webapi-vim'
 
-    " Plug 'dense-analysis/ale', {'for': ['python', 'c', 'cpp', 'typescript', 'vim']}
     Plug 'prabirshrestha/async.vim'
-    Plug 'prabirshrestha/vim-lsp', {'for': ['c', 'cpp', 'python', 'vim']}
     Plug 'prabirshrestha/asyncomplete.vim'
     Plug 'prabirshrestha/asyncomplete-lsp.vim'
+    Plug 'prabirshrestha/vim-lsp', {'for': ['c', 'cpp', 'python', 'vim']}
+    " Plug 'mattn/vim-lsp-settings', {'for': ['c', 'cpp', 'python', 'vim']}
 
     Plug 'dag/vim-fish', {'for': ['fish', 'vim']}
     Plug 'Vimjas/vim-python-pep8-indent', {'for': ['python', 'vim']}
@@ -324,61 +324,6 @@ if g:plug.is_installed('asyncomplete')
     let g:asyncomplete_auto_completeopt = 0
 endif
 
-if g:plug.is_installed('ale')
-    let g:ale_python_pyls_config = {
-                \ 'pyls' : {
-                \    'configurationSources': ['flake8'],
-                \    }
-                \ }
-    let g:ale_c_cquery_cache_directory = '/tmp/cquery/cache/'
-    let g:ale_c_cquery_executable = $HOME.'/src/github.com/cquery-project/cquery/build/release/bin/cquery'
-    let g:ale_c_clangd_executable = $HOME.'/src/github.com/cquery-project/cquery/build/clang+llvm-7.0.0-x86_64-linux-gnu-ubuntu-14.04/bin/clangd'
-    let g:ale_cpp_cquery_executable = g:ale_c_cquery_executable
-    let g:ale_cpp_clangd_executable = g:ale_c_clangd_executable
-    let g:ale_c_parse_compile_commands = 1
-    let g:ale_c_build_dir_names = ['build', 'sample']
-    let g:ale_lint_on_enter = 1
-    let g:ale_lint_on_text_changed = 1
-    let g:ale_lint_on_insert_leave = 0
-    let g:ale_lint_on_save = 1
-    set signcolumn=yes
-    " let g:ale_sign_column_always = 1
-    " let g:ale_linters = {
-    "            \   'python': ['pyls'],
-    "            \   'c': ['clangd'],
-    "            \   'cpp': ['clangd'],
-    "            \ }
-    let g:ale_linters = {
-                \   'python': ['pyls'],
-                \   'c': ['cquery'],
-                \   'cpp': ['cquery'],
-                \ }
-    let g:ale_fix_on_save = 0
-    let g:ale_fixers = {
-                \   'python': ['autopep8', 'isort'],
-                \ }
-    let g:ale_warn_about_trailing_whitespace = 1
-
-    let g:ale_completion_enabled = 1
-    function! s:configure_ale()
-        set omnifunc=ale#completion#OmniFunc
-
-        nmap <buffer>[Space]n <Plug>(ale_next)
-        nmap <buffer>[Space]p <Plug>(ale_previous)
-        nmap <buffer>K <Plug>(ale_hover)
-        nmap <buffer><C-]> <Plug>(ale_go_to_definition)
-    endfunction
-    " au FileType python,c,cpp,typescript call s:configure_ale()
-    au FileType python,c,cpp,typescript call s:configure_ale()
-
-    " aug ale
-    "     au!
-    "     au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#ale#get_source_options({
-    "                \ 'priority': 10, " Provide your own overrides here
-    "                \ }))
-    " aug END
-endif
-
 if g:plug.is_installed('lsp')
     aug Lsp
         au!
@@ -393,34 +338,42 @@ if g:plug.is_installed('lsp')
         endif
         if executable($HOME.'/src/github.com/cquery-project/cquery/build/release/bin/cquery')
             au User lsp_setup call lsp#register_server({
-                      \ 'name': 'cquery',
-                      \ 'cmd': {server_info->[$HOME.'/src/github.com/cquery-project/cquery/build/release/bin/cquery']},
-                      \ 'root_uri': {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'compile_commands.json'))},
-                      \ 'initialization_options': { 'cacheDirectory': '/tmp/cquery/cache' },
-                      \ 'whitelist': ['c', 'cpp'],
-                      \ })
-            au FileType c,cpp call s:configure_lsp() | call lsp#enable()
+                        \ 'name': 'cquery',
+                        \ 'cmd': {server_info->[$HOME.'/src/github.com/cquery-project/cquery/build/release/bin/cquery']},
+                        \ 'root_uri': {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'compile_commands.json'))},
+                        \ 'initialization_options': { 'cacheDirectory': '/tmp/cquery/cache' },
+                        \ 'whitelist': ['c', 'cpp', 'h'],
+                        \ })
+            au FileType c,cpp call s:configure_lsp()
         endif
 
         function! s:configure_lsp() abort
             setlocal omnifunc=lsp#complete
-            nnoremap <silent> <buffer> <C-]> :<C-u>LspDefinition<CR>zz
-            nnoremap <silent> <buffer> <C-w><C-]> :<C-u>sp<CR>:LspDefinition<CR>
-            " nnoremap <silent> <buffer> <C-n> :<C-u>LspNextError<CR>
-            " nnoremap <silent> <buffer> <C-p> :<C-u>LspPreviousError<CR>
-            nnoremap <silent> <buffer> gD :<C-u>LspReferences<CR>
+            setlocal signcolumn=yes
+            nnoremap <silent> <buffer> <C-]> :<C-u>LspDefinition<CR>
+            nnoremap <silent> <buffer> <C-w><C-]> :<C-u>LspPeekDefinition<CR>
+            nnoremap <silent> <buffer> <C-n> :<C-u>LspNextError<CR>
+            nnoremap <silent> <buffer> <C-p> :<C-u>LspPreviousError<CR>
+            " nnoremap <silent> <buffer> gD :<C-u>LspReferences<CR>
             " nnoremap <buffer> gs :<C-u>LspDocumentSymbol<CR>
             " nnoremap <buffer> gS :<C-u>LspWorkspaceSymbol<CR>
             " nnoremap <buffer> gQ :<C-u>LspDocumentFormat<CR>
             " vnoremap <buffer> gQ :LspDocumentRangeFormat<CR>
-            nnoremap <buffer> K :<C-u>LspHover<CR>
             " nnoremap <buffer> <F1> :<C-u>LspImplementation<CR>
-            " nnoremap <buffer> <F2> :<C-u>LspRename<CR>
-            let g:lsp_diagnostics_enabled = 0
-            let g:lsp_auto_enable = 1
+            nnoremap <buffer> K :<C-u>LspHover<CR>
+            nnoremap <buffer> gr :<C-u>LspRename<CR>
+            let g:lsp_diagnostics_enabled = 1
+            let g:lsp_diagnostics_echo_cursor = 1
+            let g:lsp_signs_error = {'text': '>>'}
+            let g:lsp_signs_warning = {'text': '--'}
+            let g:lsp_preview_float = 0
+            let g:lsp_preview_doubletap = 0
+            let g:lsp_hover_conceal = 1
+            let g:lsp_signature_help_enabled = 0
 
             " let g:lsp_log_verbose = 1
             " let g:lsp_log_file = expand('~/vim-lsp.log')
+            call lsp#enable()
         endfunction
     aug END
 endif
