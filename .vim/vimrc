@@ -335,11 +335,17 @@ endif
 
 if g:plug.is_installed('lsp')
     aug Lsp
+        let g:pyls_path = v:none
+        for p in ['pyls', $HOME.'/.local/bin/pyls', $HOME.'/virtualenv/vim/bin/pyls']
+            if executable(p)
+                let g:pyls_path = p
+            endif
+        endfor
         au!
-        if executable($HOME.'/.local/bin/pyls')
+        if g:pyls_path != v:none
             au User lsp_setup call lsp#register_server({
                         \ 'name': 'pyls',
-                        \ 'cmd': {server_info->[$HOME.'/.local/bin/pyls']},
+                        \ 'cmd': {server_info->[g:pyls_path]},
                         \ 'whitelist': ['python'],
                         \ 'workspace_config': {'pyls': {'configurationSources': ['flake8']}},
                         \ })
