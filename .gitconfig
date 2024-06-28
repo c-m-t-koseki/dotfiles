@@ -21,7 +21,7 @@
   lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
   pb = preview-branch
 [core]
-  excludesfile = ~/dotfiles/.gitignore
+  excludesfile = ~/.gitignore
   quotepath = false
 [push]
   default = simple
@@ -29,11 +29,21 @@
   rebase = true
 [merge]
   ff = false
+	tool = vimdiff
 [ghq]
   root = ~/go/src/github.com
   root = ~/src/github.morpho.local/t-koseki/dotfiles/.vim/plugged/
   root = ~/src
 [ghq "ssh://git@github.morpho.local/"]
   vcs = git
+[ghq "ssh://git@github.morphoinc.com/"]
+  vcs = git
 [ghq "https://ec2-52-198-151-12.ap-northeast-1.compute.amazonaws.com"]
   vcs = git
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[init]
+	defaultBranch = main

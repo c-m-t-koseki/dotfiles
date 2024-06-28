@@ -147,6 +147,7 @@ aug END
 " options {{{
 "" looks
 set t_Co=256
+set termguicolors
 set laststatus=2
 set showmatch
 set nowrap
@@ -173,9 +174,9 @@ if g:plug.is_installed('lightline')
 endif
 if g:plug.is_installed('airline')
     let g:airline_powerline_fonts = 1
-    let g:airline_right_sep = ' '
-    let g:airline_section_z = '%#__accent_bold#%{g:airline_symbols.linenr}%4l/%L%#__restore__# :%3v'
-    let g:airline#extensions#virtualenv#enabled = 0
+    " let g:airline_right_sep = ''
+    let g:airline_left_sep = "\uE0C6"
+    " let g:airline#extensions#virtualenv#enabled = 0
     let g:airline_symbols = {'maxlinenr': ''}
     let g:airline#extensions#default#layout = [
                 \ [ 'a', 'c' ],
@@ -186,7 +187,8 @@ if g:plug.is_installed('airline')
         au!
         function! AirlineInit()
             let g:airline_section_c = airline#section#create(['%t%m ', 'readonly'])
-            let g:airline_section_z = airline#section#create(['linenr', 'maxlinenr', ':%3v'])
+            " let g:airline_section_z = airline#section#create(['linenr', 'maxlinenr', ':%3v'])
+            let g:airline_section_z = '%#__accent_bold#%{g:airline_symbols.linenr}%4l/%L%#__restore__# :%3v'
         endfunction
         autocmd User AirlineAfterInit call AirlineInit()
     aug END
@@ -250,8 +252,8 @@ endif
 if g:plug.is_installed('fzf')
     nnoremap <silent>[Space]b :<C-u>Buffers<CR>
     nnoremap <silent>[Space]x :<C-u>Commands<CR>
-    nnoremap <silent>[Space]f :<C-u>GFiles<CR>
-    nnoremap <silent>[Space]F :<C-u>Files<CR>
+    nnoremap <silent>[Space]f :<C-u>Files<CR>
+    nnoremap <silent>[Space]F :<C-u>GFiles<CR>
     nnoremap <silent>[Space]r :<C-u>History:<CR>
     nnoremap <silent>[Space]a :<C-u>call fzf#vim#ag('', {'options': '--bind alt-enter:select-all+accept'})<CR>
     nnoremap <silent>[Space]/ :<C-u>call fzf#vim#buffer_lines('', {'options': '--bind alt-enter:select-all+accept'})<CR>
@@ -351,16 +353,17 @@ if g:plug.is_installed('lsp')
                         \ })
             au FileType python call s:configure_lsp()
         endif
-        if executable($HOME.'/src/github.com/cquery-project/cquery/build/release/bin/cquery')
+        if executable('ccls')
             au User lsp_setup call lsp#register_server({
-                        \ 'name': 'cquery',
-                        \ 'cmd': {server_info->[$HOME.'/src/github.com/cquery-project/cquery/build/release/bin/cquery']},
+                        \ 'name': 'ccls',
+                        \ 'cmd': {server_info->['ccls']},
                         \ 'root_uri': {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'compile_commands.json'))},
-                        \ 'initialization_options': { 'cacheDirectory': '/tmp/cquery/cache' },
+                        \ 'initialization_options': {},
                         \ 'whitelist': ['c', 'cpp', 'h'],
                         \ })
-            au FileType c,cpp call s:configure_lsp()
+            au FileType c,cpp,h call s:configure_lsp()
         endif
+
 
         function! s:configure_lsp() abort
             setlocal omnifunc=lsp#complete
@@ -381,7 +384,7 @@ if g:plug.is_installed('lsp')
             let g:lsp_diagnostics_echo_cursor = 1
             let g:lsp_signs_error = {'text': '>>'}
             let g:lsp_signs_warning = {'text': '--'}
-            let g:lsp_preview_float = 0
+            " let g:lsp_preview_float = 0
             let g:lsp_preview_doubletap = 0
             let g:lsp_hover_conceal = 1
             let g:lsp_signature_help_enabled = 0

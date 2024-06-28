@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+active=$1
+path=$2
+command=$3
+pid=$4
+
+[ $active == 1 ] && style='bold' || style='dim'
+
+if [ $command == ssh ]; then
+    pid=$(pgrep -P $pid ssh)
+    host=$(lsof -iTCP -a -p$pid | tail +2 | awk '{print $9}' | perl -ple 's/.*->(\w+):\w+/\1/')
+    echo "#[fg=white,$style]${color}ssh:$host $(ssh $host pid)"
+else
+    [ -z "$path" ] && path=$(lsof -d cwd -a -p $pid | tail +2 | awk '{print $9}')
+    echo "#[fg=white,$style]$path" | perl -ple 's/$ENV{HOME}/~/'
+fi

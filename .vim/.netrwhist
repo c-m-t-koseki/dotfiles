@@ -1,0 +1,12 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =2
+let g:netrw_dirhist_2='/Users/t-koseki/Downloads/csv_g_i'
+let g:netrw_dirhist_1='/Volumes/users/h-tsujimoto/ndlocr/results/exec_20240312171047_f5c7b8b/meiji/0/YB-128-明治日報-ALTO_YB-128_明治日報_140_1881-12-18_0003/dump/ex1_article_detection/xml'
+let g:netrw_dirhist_0='/Volumes/users/h-tsujimoto/ndlocr/results/exec_20240312171047_f5c7b8b/meiji/0/YB-128-明治日報-ALTO_YB-128_明治日報_140_1881-12-18_0003/dump/2_layer_ext/xml'
+let g:netrw_dirhist_9='/Users/t-koseki/src/github.morphoinc.com/morpho/mor_core/src'
+let g:netrw_dirhist_8='/Users/t-koseki/src/github.morphoinc.com/morpho/mor_auto_framing/src'
+let g:netrw_dirhist_7='/Users/t-koseki/.config/fish/functions'
+let g:netrw_dirhist_6='/Users/t-koseki/src/github.morphoinc.com/morpho/mor_obj_track3/tests/unittests'
+let g:netrw_dirhist_5='/Users/t-koseki/src/github.morphoinc.com/morpho/AutoFraming/spec'
+let g:netrw_dirhist_4='/Users/t-koseki/src/github.morphoinc.com/morpho/AutoFraming/tests/test_api'
+let g:netrw_dirhist_3='/Users/t-koseki/src/github.morphoinc.com/morpho/AutoFraming/tests/async'
